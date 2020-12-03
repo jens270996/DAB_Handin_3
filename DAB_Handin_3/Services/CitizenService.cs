@@ -80,5 +80,11 @@ namespace DAB_Handin_3.Services
             }
             return citizens;
         }
+
+        public long InfectedInterval(int minAge, int maxAge, string gender)
+        {
+            List<Citizen> all = GetAllCurrentlyInfected();
+            return all.Where(c => c.Age >= minAge && c.Age <= maxAge && gender == c.Sex).Count();
+        }
     }
 }
