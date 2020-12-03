@@ -27,14 +27,15 @@ namespace DAB_Handin_3.Models
         public string Sex { get; set; }
         public string Muni { get; set; }
         public Test[] Tests { get; set; }
-        public string ID { get; set; }
+        public int ID { get; set; }
     }
 
     
 
     public class Test
     {
-        public string Date { get; set; }
+
+        public BsonDateTime Date { get; set; }
         public string TC { get; set; }
         public string Res { get; set; }
         public string Status { get; set; }

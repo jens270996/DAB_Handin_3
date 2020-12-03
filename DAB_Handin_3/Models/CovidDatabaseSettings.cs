@@ -27,8 +27,8 @@ namespace DAB_Handin_3.Models
             {
                 string json = r.ReadToEnd();
                 ICovidDatabaseSettings settings = JsonConvert.DeserializeObject<CovidDatabaseSettings>(json);
-                
-                    
+
+                LocationDatesCollectionName = settings.LocationDatesCollectionName;
                     CitizenCollectionName = settings.CitizenCollectionName;
                     ConnectionString = settings.ConnectionString;
                     DatabaseName = settings.DatabaseName;
@@ -40,6 +40,7 @@ namespace DAB_Handin_3.Models
         }
 
         public string CitizenCollectionName { get; set; }
+        public string LocationDatesCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
@@ -47,6 +48,7 @@ namespace DAB_Handin_3.Models
     public interface ICovidDatabaseSettings
     {
         public string CitizenCollectionName { get; set; }
+        public string LocationDatesCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
