@@ -35,6 +35,7 @@ namespace DAB_Handin_3.Models
     public class Test
     {
 
+        [BsonDateTimeOptions(Kind =System.DateTimeKind.Local)]
         public BsonDateTime Date { get; set; }
         public string TC { get; set; }
         public string Res { get; set; }

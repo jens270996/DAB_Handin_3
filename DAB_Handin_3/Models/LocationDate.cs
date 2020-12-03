@@ -15,6 +15,8 @@ namespace DAB_Handin_3.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string _id { get; set; }
         public string LocID { get; set; }
+
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public BsonDateTime Date { get; set; }
         public Citizen[] Citizens { get; set; }
     }
