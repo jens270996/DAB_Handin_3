@@ -14,12 +14,12 @@ namespace DAB_Handin_3.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string _id { get; set; }
-        public string LocID { get; set; }
+        public int LocID { get; set; }
 
         [BsonElement]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime Date { get; set; }
-        public Citizen[] Citizens { get; set; }
+        public List<Citizen> Citizens { get; set; }
     }
 
   
