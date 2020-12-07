@@ -7,7 +7,7 @@ namespace DAB_Handin_3.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int _id { get; set; }
+        public string _id { get; set; }
         
         public int id { get; set; }
         public string AddressName { get; set; }
