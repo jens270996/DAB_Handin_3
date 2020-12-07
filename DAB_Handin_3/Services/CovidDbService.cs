@@ -86,5 +86,26 @@ namespace DAB_Handin_3.Services
             List<Citizen> all = GetAllCurrentlyInfected();
             return all.Where(c => c.Age >= minAge && c.Age <= maxAge && gender == c.Sex).Count();
         }
+
+        public void AddCitizen(Citizen c)
+        {
+            _citizens.InsertOne(c);
+        }
+        public void AddTest(Test test, int citizenID)
+        {
+            var citizen = _citizens.Find(ci => true).ToList().Find(c => c.ID == citizenID);
+            
+            if (citizen!=null)
+            {
+                citizen.Tests.Add(test);
+                _citizens.ReplaceOne(c => c._id == citizen._id, citizen);
+
+            }
+        }
+
+        public void AddLocation(LocationDate locationDate)
+        {
+            _locationDates.InsertOne(locationDate);
+        }
     }
 }
