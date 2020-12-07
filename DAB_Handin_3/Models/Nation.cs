@@ -10,8 +10,10 @@ namespace DAB_Handin_3.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
         public string Name { get; set; }
 
-        public Muncipaliti[] muncipalitis { get; set; }
+        public List<string> Muncipalities { get; set; } 
+        
     }
 }

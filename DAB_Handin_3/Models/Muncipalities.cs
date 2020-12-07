@@ -6,20 +6,16 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAB_Handin_3.Models
 {
-    class Muncipalities
+    public class Muncipalities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int _id { get; set; }
+        public string _id { get; set; }
         public int Population { get; set; }
+        public string Name { get; set; }
+        public string Nation{ get; set; }
+        public List<string> Citizens { get; set; }
+        public List<string>  TCS { get; set; }
         
-        public Nation nation { get; set; }
-
-        public string Nation_Name { get; set; }
-
-        public Citizen[] citizens { get; set; }
-
-        public TestCenter[] testCenters { get; set; }
-        public Location[] locationDates { get; set; }
     }
 }

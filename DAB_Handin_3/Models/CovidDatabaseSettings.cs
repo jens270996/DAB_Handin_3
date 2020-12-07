@@ -42,6 +42,7 @@ namespace DAB_Handin_3.Models
         public string LocationCollectionName { get; set; }
         public string CitizenCollectionName { get; set; }
         public string LocationDatesCollectionName { get; set; }
+        public string MunicipalityCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
@@ -53,6 +54,7 @@ namespace DAB_Handin_3.Models
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
         public string LocationCollectionName { get; set; }
+        public string MunicipalityCollectionName { get; set; }
     }
 
 }
