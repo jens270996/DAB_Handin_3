@@ -17,10 +17,10 @@ namespace DAB_Handin_3
             
 
 
-            var citizens=service.Get();
+            var citizens=service.GetCitizens();
             int id=citizens.First().ID;
             service.AddTest(new Test { Date = DateTime.Now, Res = "pos", Status = "Fine" },id);
-            citizens = service.Get();
+            citizens = service.GetCitizens();
             foreach(var cit in citizens)
             {
 
