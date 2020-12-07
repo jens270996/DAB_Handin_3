@@ -106,7 +106,7 @@ namespace DAB_Handin_3
 
                     case 'N':
                         //åben create menu
-                        //createView.OpenCreateMenu();
+                        createView.OpenCreateMenu();
                         break;
 
                     default:
