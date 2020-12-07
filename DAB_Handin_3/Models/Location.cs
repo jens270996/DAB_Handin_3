@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAB_Handin_3.Models
 {
-    class Location
+    public class Location
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

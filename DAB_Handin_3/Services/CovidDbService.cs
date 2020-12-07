@@ -115,9 +115,14 @@ namespace DAB_Handin_3.Services
             }
             else
             {
-                if()
-                _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, Citizens = new List<Citizen> { c } });
+                if(_locations.Find(l=>l.id==LocationID).Any())
+                    _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, Citizens = new List<Citizen> { c } });
             }
+        }
+        public void AddLocation(Location loc)
+        {
+            if(!(_locations.Find(l=>l.id==loc.id).Any()))
+                _locations.InsertOne(loc);
         }
 
        
