@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAB_Handin_3.Models
 {
-    class Muncipalities
+    public class Muncipalities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
