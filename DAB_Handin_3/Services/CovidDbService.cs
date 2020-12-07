@@ -136,6 +136,8 @@ namespace DAB_Handin_3.Services
 
         public void SetUpDatabase()
         {
+
+            //create collections
             //indexes
             //seed
 
