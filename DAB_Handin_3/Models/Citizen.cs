@@ -11,6 +11,8 @@
  * "ID":"1"}*/
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
 
 namespace DAB_Handin_3.Models
 {
@@ -26,7 +28,7 @@ namespace DAB_Handin_3.Models
         public int Age { get; set; }
         public string Sex { get; set; }
         public string Muni { get; set; }
-        public Test[] Tests { get; set; }
+        public List<Test> Tests { get; set; }
         public int ID { get; set; }
     }
 
@@ -34,9 +36,9 @@ namespace DAB_Handin_3.Models
 
     public class Test
     {
-
+        [BsonElement]
         [BsonDateTimeOptions(Kind =System.DateTimeKind.Local)]
-        public BsonDateTime Date { get; set; }
+        public DateTime Date { get; set; }
         public string TC { get; set; }
         public string Res { get; set; }
         public string Status { get; set; }

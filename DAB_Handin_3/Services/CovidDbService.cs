@@ -20,8 +20,8 @@ namespace DAB_Handin_3.Services
             _locationDates = database.GetCollection<LocationDate>(settings.LocationDatesCollectionName);
 
         }
-        public List<Citizen> Get() => _citizens.Find(ci => true).ToList();
-
+        public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
+        public List<LocationDate> GetLocationDates() => _locationDates.Find(ld => true).ToList();
 
         public List<Citizen> GetPossibleInfected(int ID)
         {
@@ -86,5 +86,38 @@ namespace DAB_Handin_3.Services
             List<Citizen> all = GetAllCurrentlyInfected();
             return all.Where(c => c.Age >= minAge && c.Age <= maxAge && gender == c.Sex).Count();
         }
+
+        public void AddCitizen(Citizen c)
+        {
+            _citizens.InsertOne(c);
+        }
+        public void AddTest(Test test, int citizenID)
+        {
+            var citizen = _citizens.Find(ci => true).ToList().Find(c => c.ID == citizenID);
+            
+            if (citizen!=null)
+            {
+                citizen.Tests.Add(test);
+                _citizens.ReplaceOne(c => c._id == citizen._id, citizen);
+
+            }
+        }
+
+        public void AddLocationDate(int LocationID,Citizen c,DateTime dateTime)
+        {
+            var locations=_locationDates.Find(c => c.LocID==LocationID&&c.Date.Date==dateTime.Date).ToList();
+
+            if (locations.Any())
+            {
+                locations.First().Citizens.Add(c);
+                _locationDates.ReplaceOne(l => l._id == locations.First()._id, locations.First());
+            }
+            else
+            {
+                _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, Citizens = new List<Citizen> { c } });
+            }
+        }
+
+       
     }
 }
