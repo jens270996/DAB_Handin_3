@@ -10,13 +10,12 @@ namespace DAB_Handin_3.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int _id { get; set; }
+        public string _id { get; set; }
         public int Population { get; set; }
-        public string nation { get; set; }
-        public string Nation_Name { get; set; }
-        public List<string> citizens { get; set; }
-        public List<string>  TestCenter { get; set; }
-        public List<string> Location { get; set; }
-
+        public string Name { get; set; }
+        public string Nation{ get; set; }
+        public List<string> Citizens { get; set; }
+        public List<string>  TCS { get; set; }
+        
     }
 }
