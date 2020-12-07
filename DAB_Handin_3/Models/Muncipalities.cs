@@ -16,7 +16,5 @@ namespace DAB_Handin_3.Models
         public string Nation_Name { get; set; }
         public List<string> citizens { get; set; }
         public List<string>  TestCenter { get; set; }
-        public List<string> Location { get; set; }
-
     }
 }
