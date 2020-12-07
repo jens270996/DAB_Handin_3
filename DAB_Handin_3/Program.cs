@@ -6,6 +6,7 @@ using DAB_HANDIN_3;
 using DAB_Handin_3.Models;
 using DAB_Handin_3.Services;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace DAB_Handin_3
 {
@@ -13,6 +14,7 @@ namespace DAB_Handin_3
     {
         static void Main(string[] args)
         {
+
             var service = new CovidDbService(CovidDatabaseSettings.DatabaseSettings);
 
             StatisticsView statView = new StatisticsView();
@@ -56,21 +58,28 @@ namespace DAB_Handin_3
                     case 'A':
                         //Calculate the number of active Covid19 cases - a person is infected 14 days after a positive
                         //test. Results should be shown per Municipality.
-                        using (var unitOfWork = new UnitOfWork(new CovidContext()))
+                        var totalInfected = service.GetAllCurrentlyInfected();
+                        Console.WriteLine("Total antal smittede: {0}", totalInfected.Count);
+                        
+                        // udskriv per municipality
+                        Dictionary<string, int> muniDictionary = new Dictionary<string, int>();
+                        foreach (var cit in totalInfected)
                         {
-                            var totalInfected = unitOfWork.Citizens.GetInfectedCitizens();
-                            Console.WriteLine("Total antal smittede: {0}", totalInfected);
-                            // udskriv per municipality
-                            var infectedPerMunicipality = unitOfWork.Municipalities.GetInfectedByMunicipality();
-                            List<MunicipalityPair> pairs = infectedPerMunicipality.ToList();
-                            Console.WriteLine("\n Kommune:             Antal smittede:");
-                            for (int i = 0; i < pairs.Count; i++)
+                            bool added = muniDictionary.TryAdd(cit.Muni, 1);
+                            if (!added)
                             {
-                                Console.WriteLine("\n" + pairs[i].municipality.Name + "          " + pairs[i].infected);
+                                muniDictionary.TryGetValue(cit.Muni, out var currentCount);
+                                muniDictionary[cit.Muni] = currentCount + 1;
                             }
-                            Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                            Console.ReadKey();
                         }
+
+                        Console.WriteLine("\n Kommune:             Antal smittede:");
+                        foreach (KeyValuePair<string, int> kvp in muniDictionary)
+                        {
+                            Console.WriteLine(" {0}, {1} ", kvp.Key, kvp.Value);
+                        }
+                        Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                        Console.ReadKey();
                         break;
 
                     case 'S':
@@ -97,7 +106,7 @@ namespace DAB_Handin_3
 
                     case 'N':
                         //åben create menu
-                        createView.OpenCreateMenu();
+                        //createView.OpenCreateMenu();
                         break;
 
                     default:
