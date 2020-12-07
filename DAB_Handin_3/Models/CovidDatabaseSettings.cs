@@ -30,6 +30,7 @@ namespace DAB_Handin_3.Models
 
                 LocationDatesCollectionName = settings.LocationDatesCollectionName;
                     CitizenCollectionName = settings.CitizenCollectionName;
+                LocationCollectionName = settings.LocationCollectionName;
                     ConnectionString = settings.ConnectionString;
                     DatabaseName = settings.DatabaseName;
                 
@@ -38,7 +39,7 @@ namespace DAB_Handin_3.Models
 
 
         }
-
+        public string LocationCollectionName { get; set; }
         public string CitizenCollectionName { get; set; }
         public string LocationDatesCollectionName { get; set; }
         public string ConnectionString { get; set; }
@@ -51,6 +52,7 @@ namespace DAB_Handin_3.Models
         public string LocationDatesCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
+        public string LocationCollectionName { get; set; }
     }
 
 }
