@@ -13,15 +13,10 @@ namespace DAB_Handin_3
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
             var service = new CovidDbService(CovidDatabaseSettings.DatabaseSettings);
 
-
-            
-
-
             StatisticsView statView = new StatisticsView();
-            var service = new CitizenService(CovidDatabaseSettings.DatabaseSettings);
+            //var service = new CitizenService(CovidDatabaseSettings.DatabaseSettings);
             var citizens=service.Get();
             int id=citizens.First().ID;
             service.AddTest(new Test { Date = DateTime.Now, Res = "pos", Status = "Fine" },id);
@@ -86,22 +81,18 @@ namespace DAB_Handin_3
                     case 'U':
                         //Given a new infected citizen, “calculate” which other citizen may be infected .
                         Console.WriteLine("Indtast id på smittet person.");
-                        string id = Console.ReadLine();
-                        if (string.IsNullOrEmpty(id)) continue;
-                        using (var unitOfWork = new UnitOfWork(new CovidContext()))
+                        string citId = Console.ReadLine();
+                        if (string.IsNullOrEmpty(citId)) continue;
+                        var possibleInfectedList =  service.GetPossibleInfected(int.Parse(citId));
+                        
+                        Console.WriteLine("\n Muligt smittede borgere: ");
+                       
+                        foreach (var cit in possibleInfectedList)
                         {
-                            var cit = unitOfWork.Citizens.Get(int.Parse(id));
-                            var possibleInfected = unitOfWork.Citizens.GetPossibleInfectedCitizens(cit);
-                            List<Citizen> possibleInfectedList = possibleInfected.ToList();
-                            Console.WriteLine("\n Muligt smittede borgere: ");
-                            for (int i = 0; i < possibleInfectedList.Count(); i++)
-                            {
-                                Console.WriteLine("\n " + possibleInfectedList[i].FirstName + " " + possibleInfectedList[i].LastName);
-
-                            }
-                            Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                            Console.ReadKey();
+                            Console.WriteLine($"Test result: {cit.FirstName}, Test date: {cit.LastName}");
                         }
+                        Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                        Console.ReadKey();
                         break;
 
                     case 'N':

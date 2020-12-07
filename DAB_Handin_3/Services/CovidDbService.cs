@@ -11,13 +11,14 @@ namespace DAB_Handin_3.Services
     {
         private readonly IMongoCollection<Citizen> _citizens;
         private readonly IMongoCollection<LocationDate> _locationDates;
-
+        private readonly IMongoCollection<Location> _locations;
         public CovidDbService(ICovidDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
             _citizens = database.GetCollection<Citizen>(settings.CitizenCollectionName);
             _locationDates = database.GetCollection<LocationDate>(settings.LocationDatesCollectionName);
+            _locations = database.GetCollection<Location>(settings.LocationCollectionName);
 
         }
         public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
@@ -114,8 +115,14 @@ namespace DAB_Handin_3.Services
             }
             else
             {
-                _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, Citizens = new List<Citizen> { c } });
+                if(_locations.Find(l=>l.id==LocationID).Any())
+                    _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, Citizens = new List<Citizen> { c } });
             }
+        }
+        public void AddLocation(Location loc)
+        {
+            if(!(_locations.Find(l=>l.id==loc.id).Any()))
+                _locations.InsertOne(loc);
         }
 
        
