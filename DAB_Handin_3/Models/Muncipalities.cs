@@ -13,10 +13,11 @@ namespace DAB_Handin_3.Models
         public int _id { get; set; }
         public int Population { get; set; }
         
-        public Nation nation { get; set; }
+        public string nation { get; set; }
 
         public string Nation_Name { get; set; }
 
+        public List<>
         public Citizen[] citizens { get; set; }
 
         public TestCenter[] testCenters { get; set; }
