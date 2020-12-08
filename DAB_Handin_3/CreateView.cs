@@ -74,8 +74,8 @@ namespace DAB_HANDIN_3
             currentTestCenterId++;
             service.AddTestCenter(new TestCenter
             {
-                CloseHour = close, OpenHour = open, Name = tokens[1],
-                Muni = tokens[2], ID = currentTestCenterId
+                CloseHour = close, OpenHour = open, Name = tokens[0],
+                Muni = tokens[1], ID = currentTestCenterId
             });
         }
 

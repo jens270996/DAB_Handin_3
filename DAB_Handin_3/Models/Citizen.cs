@@ -39,8 +39,13 @@ namespace DAB_Handin_3.Models
             SSN = SSN1;
             Age = alder;
             Sex = køn;
+            Tests = new List<Test>();
 
             Muni = municipality;
+        }
+        public Citizen()
+        {
+            Tests = new List<Test>();
         }
     }
     

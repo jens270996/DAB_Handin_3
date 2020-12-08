@@ -21,6 +21,8 @@ namespace DAB_Handin_3.Models
 
         public Municipality(int ID1, string Name1, int CItz)
         {
+            Citizens = new List<string>();
+            TCS = new List<string>();
             ID = ID1;
             Name = Name1;
             Population = CItz;
