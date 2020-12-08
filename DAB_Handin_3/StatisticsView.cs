@@ -1,6 +1,6 @@
 ﻿using System;
-using Covid19_Tracking;
-using Covid19_Tracking.Persistence;
+using DAB_Handin_3.Models;
+using DAB_Handin_3.Services;
 
 namespace DAB_HANDIN_3
 
@@ -46,21 +46,19 @@ namespace DAB_HANDIN_3
 
         public void SetInfectedStat(ref bool _bool, int minAge, int maxAge, string gender)
         {
-            using (var unitOfWork = new UnitOfWork(new CovidContext()))
+            var service = new CovidDbService(CovidDatabaseSettings.DatabaseSettings);
+            var numberOfInfected = service.InfectedInterval(minAge, maxAge, gender);
+            _bool = !_bool;
+            if (_bool)
             {
-                var numberOfInfected = unitOfWork.Citizens.InfectedInterval(minAge, maxAge, gender);
+                AllBoolsFalse();
                 _bool = !_bool;
-                if (_bool)
-                {
-                    AllBoolsFalse();
-                    _bool = !_bool;
-                    smittede = numberOfInfected;
-                }
-                else
-                {
-                    AllBoolsFalse();
-                    smittede = 0;
-                }
+                smittede = numberOfInfected;
+            }
+            else
+            { 
+                AllBoolsFalse();
+                smittede = 0;
             }
         }
 
