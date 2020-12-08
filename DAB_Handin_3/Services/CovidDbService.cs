@@ -454,8 +454,13 @@ namespace DAB_Handin_3.Services
             _locations.InsertOne(new Location {AddressName = "Århus vænget", City="Aarhus" , Muni = "Aarhus" , PostNr = 8200 , id = 1});
             _locations.InsertOne(new Location { AddressName = "Århus skadevej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 2 });
             _locations.InsertOne(new Location { AddressName = "Jens Botvej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 3 });
+            var cit1 = new List<int> { 1, 2, 3 };
+            var cit2 = new List<int> { 1, 4, 5, 6, 7 };
+            var cit3 = new List<int> { 1, 3, 7, 8, 9, 19 };
+            _locationDates.InsertOne(new LocationDate { LocID = 1, CitizenIDs = cit1, Date = new DateTime(2020, 12, 8) });
+            _locationDates.InsertOne(new LocationDate { LocID = 1, CitizenIDs = cit2, Date = new DateTime(2020, 12, 5) });
+            _locationDates.InsertOne(new LocationDate { LocID = 3, CitizenIDs = cit3, Date = new DateTime(2020, 12, 7) });
 
-            
         }
        
     }
