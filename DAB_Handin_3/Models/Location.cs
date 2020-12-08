@@ -9,7 +9,7 @@ namespace DAB_Handin_3.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string _id { get; set; }
         
-        public int id { get; set; }
+        public int ID { get; set; }
         public string AddressName { get; set; }
         public string Muni { get; set; }
         public string City { get; set; }

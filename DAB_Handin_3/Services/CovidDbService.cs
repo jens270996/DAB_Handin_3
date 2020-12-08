@@ -28,6 +28,10 @@ namespace DAB_Handin_3.Services
             _locations = database.GetCollection<Location>(settings.LocationCollectionName);
             _municipalities = database.GetCollection<Municipality>(settings.MunicipalityCollectionName);
             _testCenters = database.GetCollection<TestCenter>(settings.TestCenterCollectionName);
+
+
+            //skal kaldes en gang
+            //SetUpDatabase();
         }
         public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
         public List<LocationDate> GetLocationDates() => _locationDates.Find(ld => true).ToList();
@@ -43,7 +47,7 @@ namespace DAB_Handin_3.Services
                 var cit = _citizens.Find(c => c.ID == ID).First();
                 foreach(var test in cit.Tests)
                 {
-                    if(test.Res=="positive")
+                    if(test.Res=="pos")
                     {
                         for(int i =0;i<4;i++)
                         {
@@ -51,7 +55,8 @@ namespace DAB_Handin_3.Services
                         }
                     }
                 }
-                var possibleLocationDates=_locationDates.Find(l => infectedDates.Contains(
+                var locationDates = GetLocationDates();
+                var possibleLocationDates=locationDates.Where(l => infectedDates.Contains(
                     (l.Date.ToUniversalTime().Date))&&
                     (l.CitizenIDs.Where(c=>c==ID).Any()))
                     .ToList();
@@ -78,11 +83,12 @@ namespace DAB_Handin_3.Services
 
         public List<Citizen> GetAllCurrentlyInfected()
         {
-            List<Citizen> citizens = new List<Citizen>();
+            List<Citizen> Infectedcitizens = new List<Citizen>();
             try
             {
-                citizens = _citizens.Find(c => c.Tests
-                  .Where(t => t.Res == "positiv" &&
+                var citizens = _citizens.Find(c => true).ToList();
+                Infectedcitizens = citizens.Where(c => c.Tests
+                  .Where(t => t.Res == "pos" &&
                   t.Date.ToUniversalTime().AddDays(14).Date >= DateTime.Now.Date).Any()).ToList();
                 
             }
@@ -90,7 +96,7 @@ namespace DAB_Handin_3.Services
             {
                 Console.WriteLine($"BAdBadError: {e}");
             }
-            return citizens;
+            return Infectedcitizens;
         }
 
         public long InfectedInterval(int minAge, int maxAge, string gender)
@@ -130,8 +136,10 @@ namespace DAB_Handin_3.Services
             _testCenters.ReplaceOne(t => t.ID == centerID, center);
         }
 
-        public void AddLocationDate(int LocationID,Citizen c,DateTime dateTime)
+        public void AddLocationDate(int LocationID,int citizenID,DateTime dateTime)
         {
+            var c = _citizens.Find(ci => ci.ID == citizenID).First();
+
             var locations=_locationDates.Find(c => c.LocID==LocationID&&c.Date.Date==dateTime.Date).ToList();
 
             if (locations.Any())
@@ -141,7 +149,7 @@ namespace DAB_Handin_3.Services
             }
             else
             {
-                if(_locations.Find(l=>l.id==LocationID).Any())
+                if(_locations.Find(l=>l.ID==LocationID).Any())
                     _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, CitizenIDs = new List<int> { c.ID } });
             }
         }
@@ -157,13 +165,13 @@ namespace DAB_Handin_3.Services
             }
             else
             {
-                if (_locations.Find(l => l.id == LocationID).Any())
+                if (_locations.Find(l => l.ID == LocationID).Any())
                     _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, CitizenIDs = new List<int> { c.ID } });
             }
         }
         public void AddLocation(Location loc)
         {
-            if(!(_locations.Find(l=>l.id==loc.id).Any()))
+            if(!(_locations.Find(l=>l.ID==loc.ID).Any()))
                 _locations.InsertOne(loc);
         }
         public void AddMunicipality(Municipality muni)
@@ -451,9 +459,9 @@ namespace DAB_Handin_3.Services
             _municipalities.ReplaceOne(m => m.ID == 851, mun851);
 
 
-            _locations.InsertOne(new Location {AddressName = "Århus vænget", City="Aarhus" , Muni = "Aarhus" , PostNr = 8200 , id = 1});
-            _locations.InsertOne(new Location { AddressName = "Århus skadevej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 2 });
-            _locations.InsertOne(new Location { AddressName = "Jens Botvej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 3 });
+            _locations.InsertOne(new Location {AddressName = "Århus vænget", City="Aarhus" , Muni = "Aarhus" , PostNr = 8200 , ID = 1});
+            _locations.InsertOne(new Location { AddressName = "Århus skadevej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, ID = 2 });
+            _locations.InsertOne(new Location { AddressName = "Jens Botvej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, ID = 3 });
             var cit1 = new List<int> { 1, 2, 3 };
             var cit2 = new List<int> { 1, 4, 5, 6, 7 };
             var cit3 = new List<int> { 1, 3, 7, 8, 9, 19 };

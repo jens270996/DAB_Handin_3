@@ -20,7 +20,13 @@ namespace DAB_Handin_3.Models
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime Date { get; set; }
         public List<int> CitizenIDs { get; set; }
+
+        public LocationDate()
+        {
+            CitizenIDs = new List<int>();
+        }
     }
+    
 
   
 

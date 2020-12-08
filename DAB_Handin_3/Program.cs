@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DAB_HANDIN_3;
 using DAB_Handin_3.Models;
-using DAB_Handin_3.Services;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace DAB_Handin_3
@@ -20,20 +18,20 @@ namespace DAB_Handin_3
             StatisticsView statView = new StatisticsView();
             CreateView createView = new CreateView();
             //var service = new CitizenService(CovidDatabaseSettings.DatabaseSettings);
-            var citizens=service.GetCitizens();
-            int id=citizens.First().ID;
-            service.AddTest(new Test { Date = DateTime.Now, Res = "pos", Status = "Fine" },id);
-            citizens = service.GetCitizens();
-            foreach(var cit in citizens)
-            {
+            //var citizens=service.GetCitizens();
+            //int id=citizens.First().ID;
+            //service.AddTest(new Test { Date = DateTime.Now, Res = "pos", Status = "Fine" },id);
+            //citizens = service.GetCitizens();
+            //foreach(var cit in citizens)
+            //{
 
-                Console.WriteLine($"Citizen:\n  Name: {cit.FirstName}, Muni: {cit.Muni}");
-                Console.WriteLine("Tests:");
-                foreach(var test in cit.Tests)
-                {
-                    Console.WriteLine($"Test result: {test.Res}, Test date: {test.Date}");
-                }
-            }
+            //    Console.WriteLine($"Citizen:\n  Name: {cit.FirstName}, Muni: {cit.Muni}");
+            //    Console.WriteLine("Tests:");
+            //    foreach(var test in cit.Tests)
+            //    {
+            //        Console.WriteLine($"Test result: {test.Res}, Test date: {test.Date}");
+            //    }
+            //}
 
             bool finish = false;
 
