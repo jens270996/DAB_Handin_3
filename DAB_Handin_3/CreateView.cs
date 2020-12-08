@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAB_Handin_3.Models;
 using DAB_Handin_3.Services;
+using MongoDB.Libmongocrypt;
 
 
 namespace DAB_HANDIN_3
@@ -175,21 +176,27 @@ namespace DAB_HANDIN_3
 
         private void AddLocationDate()
         {
-
+            service.AddLocationDate();
             // tilføj lokationdate
-            Console.WriteLine("Indtast Navn på borgers kommune:");
-            var muni = Console.ReadLine();
-            var mun = service.GetMunicipalities().Find(m => m.Name == muni);
+            Console.WriteLine("Indtast Navn på lokationen og SSN \"lokation SSN\"");
+            string[] tokens = Console.ReadLine().Split(" ");
+            var cit = service.GetCitizens();
+            Location lok = service.GetLocation();
 
-            if (mun.Name == muni)
+            if (cit.Any(c => c.SSN == tokens[1]) && lok.Any(l => l.Name == tokens[0]));
             {
-                Console.WriteLine("Indtast adressen på den nye lokation");
-                string address = Console.ReadLine();
+                Console.WriteLine("Indtast dato får hvornår borgeren var på lokationen\"år måned dag\"");
+                string[] date = Console.ReadLine().Split(" ");
+                int aar;
+                int maaned;
+                int dag;
+                Location location = lok.Find(l => l.Name == tokens[0]);
 
-                if (address != null)
+                if (int.TryParse(tokens[0], out aar) && int.TryParse(tokens[1], out maaned) && int.TryParse(tokens[2], out dag))
                 {
-                    Location location = new Location { AddressName = address, Muni = muni };
-                    service.AddLocation(location);
+                    DateTime date = new DateTime(aar, maaned, dag);
+                    LocationDate locationDate = new LocationDate { LocID = location.ID, CitizenSSN = tokens[1], Date = date};
+                    service.AddLocationDate(locationDate);
                 }
                 else
                 {
