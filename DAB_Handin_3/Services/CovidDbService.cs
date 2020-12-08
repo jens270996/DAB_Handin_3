@@ -30,6 +30,7 @@ namespace DAB_Handin_3.Services
         }
         public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
         public List<LocationDate> GetLocationDates() => _locationDates.Find(ld => true).ToList();
+        public List<Muncipalities> GetMunicipalities() => _municipalities.Find(mu => true).ToList();
 
         public List<Citizen> GetPossibleInfected(int ID)
         {
