@@ -19,7 +19,7 @@ namespace DAB_HANDIN_3
 
         private void AddCitizen()
         {
-            List<Muncipalities> muniList = service.GetMunicipalities();
+            List<Municipality> muniList = service.GetMunicipalities();
            
             // tilføj ny borger
             Console.WriteLine("Indtast Navn på borgers kommune:");
@@ -87,7 +87,7 @@ namespace DAB_HANDIN_3
             var testCenters = service.GetTestCenters();
             if (testCenters.Any(m => m.Name == name))
             {
-                TestCenter testCenter = testCenters.Where(m => m.Name = name);
+                TestCenter testCenter = testCenters.Where(m => m.Name == name).First();
                 service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
             }
             else
@@ -109,43 +109,40 @@ namespace DAB_HANDIN_3
             TestCenter cent = null;
             if (int.TryParse(tokens[0], out borgerid) && int.TryParse(tokens[1], out centerid))
             {
-                cit = new UnitOfWork(new CovidContext()).Citizens.Find(c => c.ID == borgerid).First();
-                cent = new UnitOfWork(new CovidContext()).TestCenters.Find(c => c.TestCenterId == centerid).First();
+                cit = service.GetCitizens().Find(c => c.ID == borgerid);
 
-                if (cit.ID == borgerid && cent.TestCenterId == centerid)
+                cent = service.GetTestCenters().Find(c => c.ID == centerid);
+                    
+
+                if (cit.ID == borgerid && cent.ID == centerid)
                 {
-                    bool pos = false;
+                    string pos ="neg";
                     if (tokens[2] == "p")
-                        pos = true;
-                    using (var unitOfWork = new UnitOfWork(new CovidContext()))
-                    {
-                        TestDate test = new TestDate()
-                        {
-                            TestCenterID = centerid
-                            ,
-                            Citizen_ID = borgerid
-                            ,
-                            Date = DateTime.Now
-                            ,
-                            Status = tokens[3]
-                            ,
-                            Result = pos
-                        };
+                        pos = "pos";
 
-                        unitOfWork.TestDates.Add(test);
-                        unitOfWork.Complete();
+                    Test test = new Test()
+                    {
+                        TC = cent.Name,
+                        Res = pos,
+                        Date = DateTime.Now,
+                        Status = tokens[3]
+                    };
+
+                    service.AddTest(test,cit.ID);
+                        
                     }
                 }
             }
         }
 
-        private void AddLoaction()
+        private void AddLocation()
         {
 
             // tilføj lokation
             Console.WriteLine("Indtast Navn på borgers kommune:");
             var muni = Console.ReadLine();
-            var mun = new UnitOfWork(new CovidContext()).Municipalities.Find(c => c.Name == muni).First();
+            var mun = service.Get
+            .Municipalities.Find(c => c.Name == muni).First();
             if (mun.Name == muni)
             {
                 Console.WriteLine("Indtast adressen på den nye lokation");
