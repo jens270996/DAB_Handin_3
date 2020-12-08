@@ -13,6 +13,7 @@ namespace DAB_Handin_3.Services
         private readonly IMongoCollection<LocationDate> _locationDates;
         private readonly IMongoCollection<Location> _locations;
         private readonly IMongoCollection<Municipality> _municipalities;
+        private readonly IMongoCollection<TestCenter> _testCenters;
         public CovidDbService(ICovidDatabaseSettings settings)
         {
 
@@ -26,7 +27,7 @@ namespace DAB_Handin_3.Services
             _locationDates = database.GetCollection<LocationDate>(settings.LocationDatesCollectionName);
             _locations = database.GetCollection<Location>(settings.LocationCollectionName);
             _municipalities = database.GetCollection<Municipality>(settings.MunicipalityCollectionName);
-
+            _testCenters = database.GetCollection<TestCenter>(settings.TestCenterCollectionName);
         }
         public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
         public List<LocationDate> GetLocationDates() => _locationDates.Find(ld => true).ToList();
@@ -51,15 +52,16 @@ namespace DAB_Handin_3.Services
                 }
                 var possibleLocationDates=_locationDates.Find(l => infectedDates.Contains(
                     (l.Date.ToUniversalTime().Date))&&
-                    (l.Citizens.Where(c=>c.ID==ID).Any()))
+                    (l.CitizenIDs.Where(c=>c==ID).Any()))
                     .ToList();
 
                 foreach(var loc in possibleLocationDates)
                 {
-                    foreach(var borger in loc.Citizens)
+                    foreach(var borger in loc.CitizenIDs)
                     {
-                        if (!infectedCitizens.Contains(borger))
-                            infectedCitizens.Add(borger);
+                        var c=_citizens.Find(c => c.ID == borger).First();
+                        if (!infectedCitizens.Contains(c))
+                            infectedCitizens.Add(c);
                     }
                 }
 
@@ -99,6 +101,10 @@ namespace DAB_Handin_3.Services
         public void AddCitizen(Citizen c)
         {
             _citizens.InsertOne(c);
+            var muni=_municipalities.Find(m => m.ID == c.Muni).First();
+            muni.Citizens.Add(c.SSN);
+            _municipalities.ReplaceOne(m => m.ID == c.Muni, muni);
+
         }
         public void AddTest(Test test, int citizenID)
         {
@@ -111,6 +117,17 @@ namespace DAB_Handin_3.Services
 
             }
         }
+        public void AddTestCenter(TestCenter t)
+        {
+            _testCenters.InsertOne(t);
+            
+        }
+        public void AddTestCenterManagement(TestManagement m, int centerID)
+        {
+            var center=_testCenters.Find(t => t.ID == centerID).First();
+            center.TestManagement = m;
+            _testCenters.ReplaceOne(t => t.ID == centerID, center);
+        }
 
         public void AddLocationDate(int LocationID,Citizen c,DateTime dateTime)
         {
@@ -118,13 +135,13 @@ namespace DAB_Handin_3.Services
 
             if (locations.Any())
             {
-                locations.First().Citizens.Add(c);
+                locations.First().CitizenIDs.Add(c.ID);
                 _locationDates.ReplaceOne(l => l._id == locations.First()._id, locations.First());
             }
             else
             {
                 if(_locations.Find(l=>l.id==LocationID).Any())
-                    _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, Citizens = new List<Citizen> { c } });
+                    _locationDates.InsertOne(new LocationDate { LocID = LocationID, Date = dateTime.Date, CitizenIDs = new List<int> { c.ID } });
             }
         }
         public void AddLocation(Location loc)
@@ -138,6 +155,10 @@ namespace DAB_Handin_3.Services
             _municipalities.InsertOne(muni);
         }
 
+        public int GetHighestCitizenID()
+        {
+            return _citizens.Find(c => true).SortByDescending(c => c.ID).First().ID;
+        }
 
 
         public void SetUpDatabase()
@@ -153,7 +174,7 @@ namespace DAB_Handin_3.Services
             //
             var locationDatesBuilder = Builders<LocationDate>.IndexKeys;
             var locationDatesIndexModel = new CreateIndexModel<LocationDate>(locationDatesBuilder.Ascending(l => l.Date)
-                .Ascending(l => l.Citizens));
+                .Ascending(l => l.CitizenIDs));
 
             //seed
             var citizens = new List<Citizen>{new Citizen(1, "Henrik", "Hansen", "201209-9154", 11, "either",751),
