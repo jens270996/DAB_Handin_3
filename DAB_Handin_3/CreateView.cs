@@ -176,27 +176,25 @@ namespace DAB_HANDIN_3
 
         private void AddLocationDate()
         {
-            service.AddLocationDate();
             // tilføj lokationdate
-            Console.WriteLine("Indtast Navn på lokationen og SSN \"lokation SSN\"");
+            Console.WriteLine("Indtast adressenavn på lokationen og SSN \"adressenavn SSN\"");
             string[] tokens = Console.ReadLine().Split(" ");
             var cit = service.GetCitizens();
-            Location lok = service.GetLocation();
+            var lok = service.GetLocations();
 
-            if (cit.Any(c => c.SSN == tokens[1]) && lok.Any(l => l.Name == tokens[0]));
+            if (cit.Any(c => c.SSN == tokens[1]) && lok.Any(l => l.AddressName == tokens[0]));
             {
                 Console.WriteLine("Indtast dato får hvornår borgeren var på lokationen\"år måned dag\"");
                 string[] date = Console.ReadLine().Split(" ");
                 int aar;
                 int maaned;
                 int dag;
-                Location location = lok.Find(l => l.Name == tokens[0]);
+                Location location = lok.Find(l => l.AddressName == tokens[0]);
 
                 if (int.TryParse(tokens[0], out aar) && int.TryParse(tokens[1], out maaned) && int.TryParse(tokens[2], out dag))
                 {
-                    DateTime date = new DateTime(aar, maaned, dag);
-                    LocationDate locationDate = new LocationDate { LocID = location.ID, CitizenSSN = tokens[1], Date = date};
-                    service.AddLocationDate(locationDate);
+                    DateTime _date = new DateTime(aar, maaned, dag);
+                    service.AddLocationDate(location.ID, tokens[1], _date );
                 }
                 else
                 {
