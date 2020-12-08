@@ -87,7 +87,9 @@ namespace DAB_HANDIN_3
             var testCenters = service.GetTestCenters();
             if (testCenters.Any(m => m.Name == name))
             {
-                TestCenter testCenter = testCenters.Where(m => m.Name = name);
+                TestCenter testCenter;
+                testCenter = testCenters.Where(t => t.Name == name);
+
                 service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
             }
             else
