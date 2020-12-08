@@ -21,7 +21,7 @@ namespace DAB_Handin_3.Models
         public string Muni { get; set; }
 
         public TestManagement TestManagement { get; set; }
-
+        
     }
 
     public class TestManagement
