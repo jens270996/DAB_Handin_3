@@ -15,8 +15,16 @@ namespace DAB_Handin_3.Services
         private readonly IMongoCollection<Muncipalities> _municipalities;
         public CovidDbService(ICovidDatabaseSettings settings)
         {
+
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
+            
+            //create collections
+            database.CreateCollection(settings.CitizenCollectionName);
+            database.CreateCollection(settings.LocationDatesCollectionName);
+            database.CreateCollection(settings.LocationCollectionName);
+            database.CreateCollection(settings.MunicipalityCollectionName);
+
             _citizens = database.GetCollection<Citizen>(settings.CitizenCollectionName);
             _locationDates = database.GetCollection<LocationDate>(settings.LocationDatesCollectionName);
             _locations = database.GetCollection<Location>(settings.LocationCollectionName);
