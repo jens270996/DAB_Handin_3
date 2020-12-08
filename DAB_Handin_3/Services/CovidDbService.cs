@@ -101,6 +101,9 @@ namespace DAB_Handin_3.Services
         public void AddCitizen(Citizen c)
         {
             _citizens.InsertOne(c);
+            var muni=_municipalities.Find(m => m.ID == c.Muni).First();
+            muni.Citizens.Add(c.SSN);
+            _municipalities.ReplaceOne(m => m.ID == c.Muni, muni);
 
         }
         public void AddTest(Test test, int citizenID)
