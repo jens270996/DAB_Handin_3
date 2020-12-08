@@ -19,8 +19,8 @@ namespace DAB_HANDIN_3
 
         private void AddCitizen()
         {
-            List<Muncipalities> muniList = service.GetMunicipalities();
-           
+            List<Municipality> muniList = service.GetMunicipalities();
+
             // tilføj ny borger
             Console.WriteLine("Indtast Navn på borgers kommune:");
             var muni = Console.ReadLine();
@@ -32,8 +32,8 @@ namespace DAB_HANDIN_3
                 int val;
                 if (tokens.Length == 5 && int.TryParse(tokens[1], out val))
                 {
-                    service.AddCitizen(new Citizen { SSN = tokens[1], FirstName = tokens[2], LastName = tokens[3], Age = int.Parse(tokens[4]), 
-                                                        Sex = tokens[5], Muni = muni, ID = });
+                    service.AddCitizen(new Citizen { SSN = tokens[1], FirstName = tokens[2], LastName = tokens[3], Age = int.Parse(tokens[4]),
+                        Sex = tokens[5], Muni = muni, ID = });
                     // jens' ID funktion over
                 }
                 else
@@ -71,7 +71,7 @@ namespace DAB_HANDIN_3
             service.AddTestCenter(new TestCenter
             {
                 CloseHour = close, OpenHour = open, Name = tokens[1],
-                Muni = tokens[2], ID = 
+                Muni = tokens[2], ID =
             });
             //jens ID func over
 
@@ -87,10 +87,8 @@ namespace DAB_HANDIN_3
             var testCenters = service.GetTestCenters();
             if (testCenters.Any(m => m.Name == name))
             {
-                TestCenter testCenter;
-                testCenter = testCenters.Where(t => t.Name == name);
-
-                service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
+                TestCenter testCenter = testCenters.Where(m => m.Name == name).First();
+                service.AddTestCenterManagement(new TestManagement { Phone = res[0], Email = res[1] }, );
             }
             else
             {
@@ -111,69 +109,65 @@ namespace DAB_HANDIN_3
             TestCenter cent = null;
             if (int.TryParse(tokens[0], out borgerid) && int.TryParse(tokens[1], out centerid))
             {
-                cit = new UnitOfWork(new CovidContext()).Citizens.Find(c => c.ID == borgerid).First();
-                cent = new UnitOfWork(new CovidContext()).TestCenters.Find(c => c.TestCenterId == centerid).First();
+                cit = service.GetCitizens().Find(c => c.ID == borgerid);
 
-                if (cit.ID == borgerid && cent.TestCenterId == centerid)
+                cent = service.GetTestCenters().Find(c => c.ID == centerid);
+
+
+                if (cit.ID == borgerid && cent.ID == centerid)
                 {
-                    bool pos = false;
+                    string pos = "neg";
                     if (tokens[2] == "p")
-                        pos = true;
-                    using (var unitOfWork = new UnitOfWork(new CovidContext()))
-                    {
-                        TestDate test = new TestDate()
-                        {
-                            TestCenterID = centerid
-                            ,
-                            Citizen_ID = borgerid
-                            ,
-                            Date = DateTime.Now
-                            ,
-                            Status = tokens[3]
-                            ,
-                            Result = pos
-                        };
+                        pos = "pos";
 
-                        unitOfWork.TestDates.Add(test);
-                        unitOfWork.Complete();
-                    }
+                    Test test = new Test()
+                    {
+                        TC = cent.Name,
+                        Res = pos,
+                        Date = DateTime.Now,
+                        Status = tokens[3]
+                    };
+
+                    service.AddTest(test, cit.ID);
+
+
                 }
             }
         }
 
-        private void AddLoaction()
+        private void AddLocation()
         {
 
             // tilføj lokation
             Console.WriteLine("Indtast Navn på borgers kommune:");
             var muni = Console.ReadLine();
-            var mun = new UnitOfWork(new CovidContext()).Municipalities.Find(c => c.Name == muni).First();
+            var mun = service.GetMunicipalities().Find(m => m.Name == muni);
+
             if (mun.Name == muni)
             {
                 Console.WriteLine("Indtast adressen på den nye lokation");
                 string address = Console.ReadLine();
-                using (var unitOfWork = new UnitOfWork(new CovidContext()))
+
+                if (address != null)
                 {
-                    if (address != null)
-                    {
-                        Location location = new Location(address);
-                        unitOfWork.Locations.Add(location);
-                        unitOfWork.Complete();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ugyldig adresse.");
-                        Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                        Console.ReadKey();
-                    }
+                    Location location = new Location { AddressName = address, Muni = muni };
+                    service.AddLocation(location);
+                }
+                else
+                {
+                    Console.WriteLine("Ugyldig adresse.");
+                    Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                    Console.ReadKey();
                 }
             }
+        
             else
             {
                 Console.WriteLine("Ugyldigt kommunenavn.");
                 Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
                 Console.ReadKey();
             }
+
         }
 
         public void OpenCreateMenu()
@@ -215,7 +209,7 @@ namespace DAB_HANDIN_3
                         break;
 
                     case 'L':
-                        AddLoaction();
+                        AddLocation();
                         break;
 
                     default:
