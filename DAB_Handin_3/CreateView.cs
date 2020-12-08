@@ -84,24 +84,18 @@ namespace DAB_HANDIN_3
             var name = Console.ReadLine();
             Console.WriteLine("Indtast telefon nr. og email: \"tlf email\"");
             string[] res = Console.ReadLine().Split(" ");
-            var = service.GetTestCenter();
-                TestCenter center = unitOfWork.TestCenters.GetAll().Where(s => s.CenterName == name).First();
-                TestCenterManagement testCenterManagement = null;
-                if (center != null)
-                {
-                    testCenterManagement = new TestCenterManagement(center.TestCenterId, res[0], int.Parse(res[1]));
-
-
-                    unitOfWork.TestCenterManagements.Add(testCenterManagement);
-                    unitOfWork.Complete();
-                }
-                else
-                {
-                    
-                    Console.WriteLine("Ugyldig Center navn.");
-                    Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                    Console.ReadKey();
-                }
+            var testCenters = service.GetTestCenters();
+            if (testCenters.Any(m => m.Name == name))
+            {
+                TestCenter testCenter = testCenters.Where(m => m.Name = name);
+                service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
+            }
+            else
+            {
+                Console.WriteLine("Ugyldig Center navn.");
+                Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                Console.ReadKey();
+            }
         }
 
         private void AddTestResult()
