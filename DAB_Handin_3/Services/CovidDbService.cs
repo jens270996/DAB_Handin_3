@@ -176,6 +176,10 @@ namespace DAB_Handin_3.Services
         {
             return _citizens.Find(c => true).SortByDescending(c => c.ID).First().ID;
         }
+        public int GetHighestTestCenterID()
+        {
+            return _testCenters.Find(t => true).SortByDescending(t => t.ID).First().ID;
+        }
 
 
         public void SetUpDatabase()

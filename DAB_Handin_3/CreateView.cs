@@ -20,7 +20,7 @@ namespace DAB_HANDIN_3
         private void AddCitizen()
         {
             List<Municipality> muniList = service.GetMunicipalities();
-           
+
             // tilføj ny borger
             Console.WriteLine("Indtast Navn på borgers kommune:");
             var muni = Console.ReadLine();
@@ -32,8 +32,8 @@ namespace DAB_HANDIN_3
                 int val;
                 if (tokens.Length == 5 && int.TryParse(tokens[1], out val))
                 {
-                    service.AddCitizen(new Citizen { SSN = tokens[1], FirstName = tokens[2], LastName = tokens[3], Age = int.Parse(tokens[4]), 
-                                                        Sex = tokens[5], Muni = muni, ID = });
+                    service.AddCitizen(new Citizen { SSN = tokens[1], FirstName = tokens[2], LastName = tokens[3], Age = int.Parse(tokens[4]),
+                        Sex = tokens[5], Muni = muni, ID = });
                     // jens' ID funktion over
                 }
                 else
@@ -71,7 +71,7 @@ namespace DAB_HANDIN_3
             service.AddTestCenter(new TestCenter
             {
                 CloseHour = close, OpenHour = open, Name = tokens[1],
-                Muni = tokens[2], ID = 
+                Muni = tokens[2], ID =
             });
             //jens ID func over
 
@@ -88,7 +88,7 @@ namespace DAB_HANDIN_3
             if (testCenters.Any(m => m.Name == name))
             {
                 TestCenter testCenter = testCenters.Where(m => m.Name == name).First();
-                service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
+                service.AddTestCenterManagement(new TestManagement { Phone = res[0], Email = res[1] }, );
             }
             else
             {
@@ -112,11 +112,11 @@ namespace DAB_HANDIN_3
                 cit = service.GetCitizens().Find(c => c.ID == borgerid);
 
                 cent = service.GetTestCenters().Find(c => c.ID == centerid);
-                    
+
 
                 if (cit.ID == borgerid && cent.ID == centerid)
                 {
-                    string pos ="neg";
+                    string pos = "neg";
                     if (tokens[2] == "p")
                         pos = "pos";
 
@@ -128,9 +128,9 @@ namespace DAB_HANDIN_3
                         Status = tokens[3]
                     };
 
-                    service.AddTest(test,cit.ID);
-                        
-                    }
+                    service.AddTest(test, cit.ID);
+
+
                 }
             }
         }
@@ -141,34 +141,33 @@ namespace DAB_HANDIN_3
             // tilføj lokation
             Console.WriteLine("Indtast Navn på borgers kommune:");
             var muni = Console.ReadLine();
-            var mun = service.Get
-            .Municipalities.Find(c => c.Name == muni).First();
+            var mun = service.GetMunicipalities().Find(m => m.Name == muni);
+
             if (mun.Name == muni)
             {
                 Console.WriteLine("Indtast adressen på den nye lokation");
                 string address = Console.ReadLine();
-                using (var unitOfWork = new UnitOfWork(new CovidContext()))
+
+                if (address != null)
                 {
-                    if (address != null)
-                    {
-                        Location location = new Location(address);
-                        unitOfWork.Locations.Add(location);
-                        unitOfWork.Complete();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ugyldig adresse.");
-                        Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                        Console.ReadKey();
-                    }
+                    Location location = new Location { AddressName = address, Muni = muni };
+                    service.AddLocation(location);
+                }
+                else
+                {
+                    Console.WriteLine("Ugyldig adresse.");
+                    Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                    Console.ReadKey();
                 }
             }
+        
             else
             {
                 Console.WriteLine("Ugyldigt kommunenavn.");
                 Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
                 Console.ReadKey();
             }
+
         }
 
         public void OpenCreateMenu()
@@ -210,7 +209,7 @@ namespace DAB_HANDIN_3
                         break;
 
                     case 'L':
-                        AddLoaction();
+                        AddLocation();
                         break;
 
                     default:
