@@ -434,6 +434,7 @@ namespace DAB_Handin_3.Services
             _locations.InsertOne(new Location { AddressName = "Århus skadevej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 2 });
             _locations.InsertOne(new Location { AddressName = "Jens Botvej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 3 });
 
+            
         }
        
     }
