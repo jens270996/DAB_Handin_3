@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAB_Handin_3.Models
 {
-    public class Muncipalities
+    public class Municipality
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -16,6 +16,16 @@ namespace DAB_Handin_3.Models
         public string Nation{ get; set; }
         public List<string> Citizens { get; set; }
         public List<string>  TCS { get; set; }
-        
+
+        public int ID { get; set; }
+
+        public Municipality(int ID1, string Name1, int CItz)
+        {
+            ID = ID1;
+            Name = Name1;
+            Population = CItz;
+
+        }
+
     }
 }
