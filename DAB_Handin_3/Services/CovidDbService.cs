@@ -36,6 +36,7 @@ namespace DAB_Handin_3.Services
         public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
         public List<LocationDate> GetLocationDates() => _locationDates.Find(ld => true).ToList();
         public List<Municipality> GetMunicipalities() => _municipalities.Find(mu => true).ToList();
+        public List<Location> GetLocations() => _locations.Find(l => true).ToList();
 
         public List<TestCenter> GetTestCenters() => _testCenters.Find(c => true).ToList();
         public List<Citizen> GetPossibleInfected(int ID)
@@ -136,9 +137,9 @@ namespace DAB_Handin_3.Services
             _testCenters.ReplaceOne(t => t.ID == centerID, center);
         }
 
-        public void AddLocationDate(int LocationID,int citizenID,DateTime dateTime) 
+        public void AddLocationDate(int LocationID,string citizenSSN,DateTime dateTime)
         {
-            var c = _citizens.Find(ci => ci.ID == citizenID).First();
+            var c = _citizens.Find(ci => ci.SSN == citizenSSN).First();
 
             var locations=_locationDates.Find(c => c.LocID==LocationID&&c.Date.Date==dateTime.Date).ToList();
 
