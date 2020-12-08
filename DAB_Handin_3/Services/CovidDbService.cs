@@ -431,6 +431,10 @@ namespace DAB_Handin_3.Services
             _municipalities.ReplaceOne(m => m.ID == 851, mun851);
 
 
+            _locations.InsertOne(new Location {AddressName = "Århus vænget", City="Aarhus" , Muni = "Aarhus" , PostNr = 8200 , id = 1});
+            _locations.InsertOne(new Location { AddressName = "Århus skadevej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 2 });
+            _locations.InsertOne(new Location { AddressName = "Jens Botvej", City = "Aarhus", Muni = "Aarhus", PostNr = 8200, id = 3 });
+
         }
        
     }
