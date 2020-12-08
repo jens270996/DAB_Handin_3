@@ -136,8 +136,10 @@ namespace DAB_Handin_3.Services
             _testCenters.ReplaceOne(t => t.ID == centerID, center);
         }
 
-        public void AddLocationDate(int LocationID,Citizen c,DateTime dateTime)
+        public void AddLocationDate(int LocationID,int citizenID,DateTime dateTime)
         {
+            var c = _citizens.Find(ci => ci.ID == citizenID).First();
+
             var locations=_locationDates.Find(c => c.LocID==LocationID&&c.Date.Date==dateTime.Date).ToList();
 
             if (locations.Any())
