@@ -12,14 +12,17 @@ namespace DAB_HANDIN_3
     public class CreateView
     {
         private CovidDbService service;
+        private int currentCitId;
+        private int currentTestCenterId;
         public CreateView()
         {
             service = new CovidDbService(CovidDatabaseSettings.DatabaseSettings);
+            currentCitId = service.GetHighestCitizenID();
         }
 
         private void AddCitizen()
         {
-            List<Muncipalities> muniList = service.GetMunicipalities();
+            List<Municipality> muniList = service.GetMunicipalities();
            
             // tilføj ny borger
             Console.WriteLine("Indtast Navn på borgers kommune:");
@@ -32,9 +35,10 @@ namespace DAB_HANDIN_3
                 int val;
                 if (tokens.Length == 5 && int.TryParse(tokens[1], out val))
                 {
-                    service.AddCitizen(new Citizen { SSN = tokens[1], FirstName = tokens[2], LastName = tokens[3], Age = int.Parse(tokens[4]), 
-                                                        Sex = tokens[5], Muni = muni, ID = });
-                    // jens' ID funktion over
+                    currentCitId++;
+                    Municipality municipality = muniList.Find(m => m.Name == muni);
+                    int munId = municipality.ID; 
+                    service.AddCitizen(new Citizen {ID = currentCitId, FirstName = tokens[1], LastName = tokens[2], SSN = tokens[0], Age = int.Parse(tokens[3]), Sex = tokens[4], Muni = munId});
                 }
                 else
                 {
@@ -67,14 +71,12 @@ namespace DAB_HANDIN_3
 
             Console.WriteLine("Indtast Test center Navn og kommune: \"navn kommune\"");
             var tokens = Console.ReadLine().Split(" ");
-            // Name - ID - Openhour - CloseHour - Muni
+            currentTestCenterId++;
             service.AddTestCenter(new TestCenter
             {
                 CloseHour = close, OpenHour = open, Name = tokens[1],
-                Muni = tokens[2], ID = 
+                Muni = tokens[2], ID = currentTestCenterId
             });
-            //jens ID func over
-
         }
 
         private void AddManagment()
@@ -88,9 +90,8 @@ namespace DAB_HANDIN_3
             if (testCenters.Any(m => m.Name == name))
             {
                 TestCenter testCenter;
-                testCenter = testCenters.Where(t => t.Name == name);
-
-                service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
+                testCenter = testCenters.Find(t => t.Name == name);
+                service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, testCenter.ID);
             }
             else
             {
@@ -203,7 +204,7 @@ namespace DAB_HANDIN_3
                         break;
 
                     case 'C':
-                    AddTestCenter();
+                        AddTestCenter();
                         break;
 
                     case 'O':

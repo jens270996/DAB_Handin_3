@@ -30,7 +30,7 @@ namespace DAB_Handin_3.Models
         public int Muni { get; set; }
         public List<Test> Tests { get; set; }
         public int ID { get; set; }
-
+        
         public Citizen(int id, string forNavn, string efterNavn, string SSN1, int alder, string køn, int municipality)
         {
             ID = id;
