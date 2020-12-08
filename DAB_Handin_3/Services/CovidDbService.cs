@@ -13,6 +13,7 @@ namespace DAB_Handin_3.Services
         private readonly IMongoCollection<LocationDate> _locationDates;
         private readonly IMongoCollection<Location> _locations;
         private readonly IMongoCollection<Municipality> _municipalities;
+        private readonly IMongoCollection<TestCenter> _testCenters;
         public CovidDbService(ICovidDatabaseSettings settings)
         {
 
@@ -26,7 +27,7 @@ namespace DAB_Handin_3.Services
             _locationDates = database.GetCollection<LocationDate>(settings.LocationDatesCollectionName);
             _locations = database.GetCollection<Location>(settings.LocationCollectionName);
             _municipalities = database.GetCollection<Municipality>(settings.MunicipalityCollectionName);
-
+            _testCenters = database.GetCollection<TestCenter>(settings.TestCenterCollectionName);
         }
         public List<Citizen> GetCitizens() => _citizens.Find(ci => true).ToList();
         public List<LocationDate> GetLocationDates() => _locationDates.Find(ld => true).ToList();
@@ -112,6 +113,17 @@ namespace DAB_Handin_3.Services
                 _citizens.ReplaceOne(c => c._id == citizen._id, citizen);
 
             }
+        }
+        public void AddTestCenter(TestCenter t)
+        {
+            _testCenters.InsertOne(t);
+            
+        }
+        public void AddTestCenterManagement(TestManagement m, int centerID)
+        {
+            var center=_testCenters.Find(t => t.ID == centerID).First();
+            center.TestManagement = m;
+            _testCenters.ReplaceOne(t => t.ID == centerID, center);
         }
 
         public void AddLocationDate(int LocationID,Citizen c,DateTime dateTime)

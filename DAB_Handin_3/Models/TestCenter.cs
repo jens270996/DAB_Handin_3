@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAB_Handin_3.Models
 {
-    class TestCenter
+    public class TestCenter
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
