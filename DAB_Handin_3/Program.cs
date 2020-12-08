@@ -18,6 +18,7 @@ namespace DAB_Handin_3
             var service = new CovidDbService(CovidDatabaseSettings.DatabaseSettings);
 
             StatisticsView statView = new StatisticsView();
+            CreateView createView = new CreateView();
             //var service = new CitizenService(CovidDatabaseSettings.DatabaseSettings);
             var citizens=service.Get();
             int id=citizens.First().ID;
