@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using DAB_Handin_3.Models;
@@ -18,17 +19,22 @@ namespace DAB_HANDIN_3
 
         private void AddCitizen()
         {
+            List<Muncipalities> muniList = service.GetMunicipalities();
+           
             // tilføj ny borger
             Console.WriteLine("Indtast Navn på borgers kommune:");
             var muni = Console.ReadLine();
-            if (service. == muni)
+            if (muniList.Any(m => m.Name == muni))
             {
-                Console.WriteLine("Indtast Navn, ssn, alder, køn: \"Fornavn efternavn ssn alder køn\"");
+                // SSN - FirstN - LastN - Age - Sex - Muni -ID
+                Console.WriteLine("Indtast SSN, fornavn, efternavn, alder, køn: \"ssn fornavn efternavn alder køn\"");
                 var tokens = Console.ReadLine().Split(" ");
                 int val;
-                if (tokens.Length == 5 && int.TryParse(tokens[3], out val))
+                if (tokens.Length == 5 && int.TryParse(tokens[1], out val))
                 {
-                    service.AddTest(new Test { Date = DateTime.Now, Res = "pos", Status = "Fine" }, id);
+                    service.AddCitizen(new Citizen { SSN = tokens[1], FirstName = tokens[2], LastName = tokens[3], Age = int.Parse(tokens[4]), 
+                                                        Sex = tokens[5], Muni = muni, ID = });
+                    // jens' ID funktion over
                 }
                 else
                 {
@@ -53,21 +59,22 @@ namespace DAB_HANDIN_3
             int close;
             do
             {
-                Console.WriteLine("Enter Test center hours: \"open close\"");
+                Console.WriteLine("Indtast Test center åbningstider: \"open close\"");
                 string hours = Console.ReadLine();
                 hoursarr = hours.Split(" ");
             }
             while (hoursarr.Length != 2 || !int.TryParse(hoursarr[0], out open) || !int.TryParse(hoursarr[1], out close));
 
-            Console.WriteLine("Enter Test center name: \"name\"");
-            string name = Console.ReadLine();
-            using (var unitOfWork = new UnitOfWork(new CovidContext()))
+            Console.WriteLine("Indtast Test center Navn og kommune: \"navn kommune\"");
+            var tokens = Console.ReadLine().Split(" ");
+            // Name - ID - Openhour - CloseHour - Muni
+            service.AddTestCenter(new TestCenter
             {
-                var testCenter = new TestCenter(open, close, name);
+                CloseHour = close, OpenHour = open, Name = tokens[1],
+                Muni = tokens[2], ID = 
+            });
+            //jens ID func over
 
-                unitOfWork.TestCenters.Add(testCenter);
-                unitOfWork.Complete();
-            }
         }
 
         private void AddManagment()
@@ -77,25 +84,17 @@ namespace DAB_HANDIN_3
             var name = Console.ReadLine();
             Console.WriteLine("Indtast telefon nr. og email: \"tlf email\"");
             string[] res = Console.ReadLine().Split(" ");
-            using (var unitOfWork = new UnitOfWork(new CovidContext()))
+            var testCenters = service.GetTestCenters();
+            if (testCenters.Any(m => m.Name == name))
             {
-                TestCenter center = unitOfWork.TestCenters.GetAll().Where(s => s.CenterName == name).First();
-                TestCenterManagement testCenterManagement = null;
-                if (center != null)
-                {
-                    testCenterManagement = new TestCenterManagement(center.TestCenterId, res[0], int.Parse(res[1]));
-
-
-                    unitOfWork.TestCenterManagements.Add(testCenterManagement);
-                    unitOfWork.Complete();
-                }
-                else
-                {
-                    
-                    Console.WriteLine("Ugyldig Center navn.");
-                    Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                    Console.ReadKey();
-                }
+                TestCenter testCenter = testCenters.Where(m => m.Name = name);
+                service.AddTestCenterManagement( new TestManagement{Phone = res[0], Email = res[1]}, );
+            }
+            else
+            {
+                Console.WriteLine("Ugyldig Center navn.");
+                Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                Console.ReadKey();
             }
         }
 
