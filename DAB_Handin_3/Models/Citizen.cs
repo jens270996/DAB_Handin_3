@@ -27,9 +27,21 @@ namespace DAB_Handin_3.Models
         public string LastName { get; set; }
         public int Age { get; set; }
         public string Sex { get; set; }
-        public string Muni { get; set; }
+        public int Muni { get; set; }
         public List<Test> Tests { get; set; }
         public int ID { get; set; }
+
+        public Citizen(int id, string forNavn, string efterNavn, string SSN1, int alder, string køn, int municipality)
+        {
+            ID = id;
+            FirstName = forNavn;
+            LastName = efterNavn;
+            SSN = SSN1;
+            Age = alder;
+            Sex = køn;
+
+            Muni = municipality;
+        }
     }
     
     
