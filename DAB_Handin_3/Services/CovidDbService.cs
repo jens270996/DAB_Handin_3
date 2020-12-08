@@ -17,14 +17,11 @@ namespace DAB_Handin_3.Services
         {
 
             var client = new MongoClient(settings.ConnectionString);
+            
             var database = client.GetDatabase(settings.DatabaseName);
             
             //create collections
-            database.CreateCollection(settings.CitizenCollectionName);
-            database.CreateCollection(settings.LocationDatesCollectionName);
-            database.CreateCollection(settings.LocationCollectionName);
-            database.CreateCollection(settings.MunicipalityCollectionName);
-
+            //if collection doesn't exist, it will be created on first insert
             _citizens = database.GetCollection<Citizen>(settings.CitizenCollectionName);
             _locationDates = database.GetCollection<LocationDate>(settings.LocationDatesCollectionName);
             _locations = database.GetCollection<Location>(settings.LocationCollectionName);
@@ -145,8 +142,18 @@ namespace DAB_Handin_3.Services
         public void SetUpDatabase()
         {
 
-            //create collections
+
             //indexes
+
+            //citizen index on ID
+            var citizenBuilder = Builders<Citizen>.IndexKeys;
+            var citizenIndexModel = new CreateIndexModel<Citizen>(citizenBuilder.Ascending(c => c.ID));
+
+            //
+            var locationDatesBuilder = Builders<LocationDate>.IndexKeys;
+            var locationDatesIndexModel = new CreateIndexModel<LocationDate>(locationDatesBuilder.Ascending(l => l.Date)
+                .Ascending(l => l.Citizens));
+
             //seed
 
         }
