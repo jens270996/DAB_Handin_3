@@ -173,6 +173,41 @@ namespace DAB_HANDIN_3
 
         }
 
+        private void AddLocationDate()
+        {
+
+            // tilføj lokationdate
+            Console.WriteLine("Indtast Navn på borgers kommune:");
+            var muni = Console.ReadLine();
+            var mun = service.GetMunicipalities().Find(m => m.Name == muni);
+
+            if (mun.Name == muni)
+            {
+                Console.WriteLine("Indtast adressen på den nye lokation");
+                string address = Console.ReadLine();
+
+                if (address != null)
+                {
+                    Location location = new Location { AddressName = address, Muni = muni };
+                    service.AddLocation(location);
+                }
+                else
+                {
+                    Console.WriteLine("Ugyldig adresse.");
+                    Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                    Console.ReadKey();
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("Ugyldigt kommunenavn.");
+                Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
+                Console.ReadKey();
+            }
+
+        }
+
         public void OpenCreateMenu()
         {
             bool finish = false;
