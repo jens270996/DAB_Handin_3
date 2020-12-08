@@ -20,10 +20,10 @@ namespace DAB_Handin_3
             StatisticsView statView = new StatisticsView();
             CreateView createView = new CreateView();
             //var service = new CitizenService(CovidDatabaseSettings.DatabaseSettings);
-            var citizens=service.Get();
+            var citizens=service.GetCitizens();
             int id=citizens.First().ID;
             service.AddTest(new Test { Date = DateTime.Now, Res = "pos", Status = "Fine" },id);
-            citizens = service.Get();
+            citizens = service.GetCitizens();
             foreach(var cit in citizens)
             {
 
@@ -63,7 +63,7 @@ namespace DAB_Handin_3
                         Console.WriteLine("Total antal smittede: {0}", totalInfected.Count);
                         
                         // udskriv per municipality
-                        Dictionary<string, int> muniDictionary = new Dictionary<string, int>();
+                        Dictionary<int, int> muniDictionary = new Dictionary<int, int>();
                         foreach (var cit in totalInfected)
                         {
                             bool added = muniDictionary.TryAdd(cit.Muni, 1);
@@ -75,7 +75,7 @@ namespace DAB_Handin_3
                         }
 
                         Console.WriteLine("\n Kommune:             Antal smittede:");
-                        foreach (KeyValuePair<string, int> kvp in muniDictionary)
+                        foreach (KeyValuePair<int, int> kvp in muniDictionary)
                         {
                             Console.WriteLine(" {0}, {1} ", kvp.Key, kvp.Value);
                         }
