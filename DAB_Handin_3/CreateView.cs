@@ -204,13 +204,6 @@ namespace DAB_HANDIN_3
                 }
             }
 
-            else
-            {
-                Console.WriteLine("Ugyldigt kommunenavn.");
-                Console.WriteLine("Tryk på en knap for at vælge en ny mulighed");
-                Console.ReadKey();
-            }
-
         }
 
         public void OpenCreateMenu()
